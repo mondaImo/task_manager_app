@@ -31,7 +31,7 @@ class _SignupScreenState extends State<SignupScreen> {
       return;
     }
 
-    final success = await _authService.Signup(username, email, password);
+    final success = await _authService.signUp(username, email, password);
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(

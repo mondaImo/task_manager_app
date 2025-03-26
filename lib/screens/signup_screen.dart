@@ -2,43 +2,45 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final AuthService _authservice = AuthService();
+  final AuthService _authService = AuthService();
   bool _isLoading = false;
 
-  Future<void> _handleLogin() async {
+  Future<void> _handleSignup() async {
     setState(() => _isLoading = true);
 
     final username = _usernameController.text.trim();
+    final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    if (username.isEmpty || password.isEmpty) {
+    if (username.isEmpty || email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter username or password"))
+        const SnackBar(content: Text("Please enter all fields"))
       );
       setState(() => _isLoading = false);
       return;
     }
 
-    final success = await _authservice.login(username, password);
+    final success = await _authService.Signup(username, email, password);
 
-    if(success) {
+    if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Login Successful"))
+        const SnackBar(content: Text("Signup Successful! Please login."))
       );
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pop(context);  // Go back to login
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Login failed. Please try again."))
+        const SnackBar(content: Text("Signup failed. Try again."))
       );
     }
 
@@ -49,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Task Manager"),
+        title: const Text("Signup"),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Padding(
@@ -63,21 +65,22 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 12),
             TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(border: OutlineInputBorder(), labelText: 'Email'),
+              keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: 12),
+            TextField(
               controller: _passwordController,
               obscureText: true,
               decoration: const InputDecoration(border: OutlineInputBorder(), labelText: 'Password'),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _isLoading ? null : _handleLogin,
-              child: _isLoading 
-                    ? const CircularProgressIndicator() 
-                    : const Text('Login'),
-            ),
-            const SizedBox(height: 20),
-            TextButton(
-              onPressed: () => Navigator.pushNamed(context, '/signup'),
-              child: const Text("Don't have an account? Sign Up"),
+              onPressed: _isLoading ? null : _handleSignup,
+              child: _isLoading
+                  ? const CircularProgressIndicator()
+                  : const Text('Sign Up'),
             ),
           ],
         ),

@@ -6,6 +6,33 @@ import '../../application.dart';
 class AuthService {
   final storage = FlutterSecureStorage();
 
+  // Signup method
+  Future<bool> Signup(String username, String email, String password) async {
+    final url = Uri.parse('$baseUrl/users');
+
+    final response = await http.post(
+      url,
+      headers: {
+        "X-Parse-Application-Id": appId,
+        "X-Parse-REST-API-Key": apiKey,
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({
+        "username": username,
+        "password": password,
+        "email": email
+      }),
+    );
+
+    if(response.statusCode == 201) {
+      print("Signup successful: ${response.body}");
+      return true;
+    } else {
+      print("Signup failed: ${response.body}");
+      return false;
+    }
+  }
+
   // Login method
   Future<bool> login(String username, String password) async {
     final url = Uri.parse('$baseUrl/login');

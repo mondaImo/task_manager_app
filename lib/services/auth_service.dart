@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../application.dart';
@@ -7,7 +8,7 @@ class AuthService {
   final storage = FlutterSecureStorage();
 
   // Signup method
-  Future<bool> Signup(String username, String email, String password) async {
+  Future<bool> signUp(String username, String email, String password) async {
     final url = Uri.parse('$baseUrl/users');
 
     final response = await http.post(
@@ -25,10 +26,10 @@ class AuthService {
     );
 
     if(response.statusCode == 201) {
-      print("Signup successful: ${response.body}");
+      debugPrint("Signup successful: ${response.body}");
       return true;
     } else {
-      print("Signup failed: ${response.body}");
+      debugPrint("Signup failed: ${response.body}");
       return false;
     }
   }
@@ -53,13 +54,15 @@ class AuthService {
     if(response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final sessionToken = data['sessionToken'];
+      final userId = data['objectId'];
 
       await storage.write(key: 'sessionToken', value: sessionToken);
-      print("Login successfull. Token: $sessionToken");
+      await storage.write(key: 'userId', value: userId);
+      debugPrint("Login successfull. Token: $sessionToken, useId: $userId");
 
       return true;
     } else {
-      print("Login failed: ${response.body}");
+      debugPrint("Login failed: ${response.body}");
       return false;
     }
   }
@@ -81,7 +84,7 @@ class AuthService {
       );
 
       await storage.delete(key: 'sessionToken');
-      print("Logged out successfully.");
+      debugPrint("Logged out successfully.");
     }
   }
 

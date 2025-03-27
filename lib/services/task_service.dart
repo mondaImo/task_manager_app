@@ -118,7 +118,7 @@ class TaskService {
 
   Future<void> deleteTask(String objectId, String sessionToken) async {
     final response = await http.delete(
-      Uri.parse('$baseUrl/$objectId'),
+      Uri.parse('$baseUrl/classes/task//$objectId'),
       headers: {
         "X-Parse-Application-Id": appId,
         "X-Parse-REST-API-Key": apiKey,

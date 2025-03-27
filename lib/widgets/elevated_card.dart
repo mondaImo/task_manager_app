@@ -24,7 +24,9 @@ class ElevatedCard extends StatelessWidget {
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
+              softWrap: true,
             ),
             const SizedBox(height: 8),
             Text(

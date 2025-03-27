@@ -71,6 +71,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Future<void> _deleteTask(String objectId) async {
+    final sessionToken = await _storage.read(key: 'sessionToken');
+    if (sessionToken != null) {
+      await _taskService.deleteTask(objectId, sessionToken);
+      _loadTasks();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,9 +107,33 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (context, index) {
                 final task = _tasks[index];
 
-                return GestureDetector(
-                  onTap: () => _navigateToEditTask(task),
-                  child: ElevatedCard(task: task),
+                return Stack(
+                  children: [
+                    GestureDetector(
+                      onTap: () => _navigateToEditTask(task),
+                      child: ElevatedCard(task: task),
+                    ),
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: PopupMenuButton<String>(
+                        onSelected: (value) {
+                          if (value == 'delete') {
+                              _deleteTask(task['objectId']);
+                          }
+                        },
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(
+                            value: 'delete',
+                            child: SizedBox(
+                              width: 40,
+                              child: Text('Delete'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 );
               },
             )

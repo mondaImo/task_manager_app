@@ -96,12 +96,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Task'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: _deleteTask,
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -127,7 +121,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               items: const [
                 DropdownMenuItem(value: 'open', child: Text('Open')),
                 DropdownMenuItem(value: 'In Progress', child: Text('In Progress')),
-                DropdownMenuItem(value: 'closed', child: Text('Closed')),
+                DropdownMenuItem(value: 'completed', child: Text('Completed')),
               ],
               onChanged: (value) {
                 setState(() {

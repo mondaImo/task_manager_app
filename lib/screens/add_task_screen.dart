@@ -12,7 +12,7 @@ class AddTaskScreen extends StatefulWidget {
 class _AddTaskScreenState extends State<AddTaskScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _statusController = TextEditingController();
+  // final TextEditingController _statusController = TextEditingController();
   final TaskService _taskService = TaskService();
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
@@ -23,7 +23,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
     final title = _titleController.text.trim();
     final description = _descriptionController.text.trim();
-    final status = _statusController.text.trim();
+    // final status = _statusController.text.trim();
+    final status = 'open';
 
     if (title.isEmpty || description.isEmpty || status.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -69,19 +70,22 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           children: [
             TextField(
               controller: _titleController,
-              decoration: const InputDecoration(labelText: 'Title'),
+              decoration: const InputDecoration(hintText: 'Title'),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: _descriptionController,
-              decoration: const InputDecoration(labelText: 'Description'),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _statusController,
-              decoration: const InputDecoration(labelText: 'Status'),
+              decoration: const InputDecoration(
+                border: InputBorder.none, hintText: 'Description'
+              ),
+              maxLines: 5,
             ),
             const SizedBox(height: 20),
+            // TextField(
+            //   controller: _statusController,
+            //   decoration: const InputDecoration(labelText: 'Status'),
+            // ),
+            // const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _isLoading ? null : _createTask,
               child: _isLoading

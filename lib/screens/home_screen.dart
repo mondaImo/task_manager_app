@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:task_manager_app/screens/add_task_screen.dart';
+import 'package:task_manager_app/screens/edit_task_screen.dart';
 import 'package:task_manager_app/screens/login_screen.dart';
 import 'package:task_manager_app/services/task_service.dart';
+import 'package:task_manager_app/widgets/elevated_card.dart';
 import '../services/auth_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -47,6 +49,19 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _navigateToEditTask(Map<String, dynamic> task) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditTaskScreen(task: task),
+      ),
+    );
+
+    if (result == true) {
+      _loadTasks();
+    }
+  }
+
   Future<void> _handleLogout() async {
     await _authService.logout();
     await _storage.deleteAll();
@@ -71,16 +86,25 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-            itemCount: _tasks.length,
-            itemBuilder: (context, index) {
-              final task = _tasks[index];
-              return ListTile(
-                title: Text(task['title']),
-                subtitle: Text(task['description']),
-                trailing: Text(task['status']),
-              );
-            },
+          : Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 1,
+              ),
+              itemCount: _tasks.length,
+              itemBuilder: (context, index) {
+                final task = _tasks[index];
+
+                return GestureDetector(
+                  onTap: () => _navigateToEditTask(task),
+                  child: ElevatedCard(task: task),
+                );
+              },
+            )
           ),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToAddTask,

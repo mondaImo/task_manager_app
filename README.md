@@ -23,18 +23,18 @@ To get this project up and running on your local machine for development and tes
   3. Edit the class's "Class Level Permission" to allow Read, Write permission for Authenticated user only.
   4. Clone the repository:
      
-          `git clone https://github.com/mondaImo/task_manager_app`
+          git clone https://github.com/mondaImo/task_manager_app
      
   5. Replace the "SET_ME" vlues wtih your backend service's actual API Address, Application ID and REST API key  in lib/application.dart from Back4App.
   6. Navigate to the project directory
 
-         `cd task_manager_app`
+         cd task_manager_app
   7. Install dependencies:
 
-          `flutter pub get` 
+          flutter pub get
   8. Run the app:
 
-         `flutter run`
+         flutter run
 
 ## Usage
 
